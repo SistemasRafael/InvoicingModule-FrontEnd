@@ -1,11 +1,23 @@
-import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { create } from 'zustand'
 import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem } from '@coreui/react-pro';
 
+type Store = {
+  count: number
+  setCount: () => void
+}
+
+const useStore = create<Store>()((set) => ({
+  count: 1,
+  setCount: () => set((state) => ({ 
+    count: state.count + 1 
+  })),
+}))
+
 function App() {
-  const [count, setCount] = useState(0)
+  const { count, setCount } = useStore();
 
   return (
     <>
@@ -54,7 +66,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => setCount()}>
           count is {count}
         </button>
         <p>
