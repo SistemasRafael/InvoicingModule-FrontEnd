@@ -1,81 +1,168 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { create } from 'zustand'
-import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem } from '@coreui/react-pro';
+import { 
+  CRow,
+  CCol,
+  CForm,
+  CFormLabel,
+  CFormInput,
+  CFormText,
+  CDatePicker,
+  CButton,
+  CFormSelect,
+  CCard,
+  CCardHeader,
+  CCardBody,
+  CCardFooter
+} from '@coreui/react-pro';
+ import { useFormik } from 'formik';
+import { useEffect } from 'react';
+ import * as Yup from 'yup';
+import type { FormStore } from './core/types/form-store';
+import type { Invoice } from './core/types/Invoice';
 
-type Store = {
-  count: number
-  setCount: () => void
-}
+const useInvoiceForm = create<FormStore>((set) => ({
+  invoice: {
+    clientName: '',
+    date: undefined,
+    status: '',
+    amount: 0,
+  } as Invoice,
+  setInvoice: (data : Invoice) => set({ invoice: data }),
+  clearInvoice: () => set({ invoice: {
+    clientName: '',
+    date: undefined,
+    status: '',
+    amount: 0,
+  } as Invoice }),
+}));
 
-const useStore = create<Store>()((set) => ({
-  count: 1,
-  setCount: () => set((state) => ({ 
-    count: state.count + 1 
-  })),
-}))
+const validationSchema = Yup.object({
+  clientName: Yup.string()
+    .max(45, 'Must be 45 characters or less')
+    .required('This field is required!'),
+  date: Yup.date()
+    .nonNullable()
+    .required('This field is required!'),
+  status: Yup.string()
+    .required('This field is required!'),
+  amount: Yup.number()
+    .required('This field is required!')
+    .min(1, 'Number cannot be negative or zero'),
+});
 
 function App() {
-  const { count, setCount } = useStore();
+
+  const { invoice, setInvoice, clearInvoice } = useInvoiceForm();
+
+  const formik = useFormik({
+    initialValues : invoice,
+    validationSchema: validationSchema,
+    onSubmit: async values => {
+      await setInvoice(values);
+    },
+  });
+
+  useEffect(() => {
+    formik.submitForm();
+  }, []);
 
   return (
     <>
-      <CAccordion activeItemKey={2}>
-        <CAccordionItem itemKey={1}>
-          <CAccordionHeader>Accordion Item #1</CAccordionHeader>
-          <CAccordionBody>
-            <strong>This is the first item&#39;s accordion body.</strong> It is hidden by default,
-            until the collapse plugin adds the appropriate classes that we use to style each element.
-            These classes control the overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or overriding our default
-            variables. It&#39;s also worth noting that just about any HTML can go within the{' '}
-            <code>.accordion-body</code>, though the transition does limit overflow.
-          </CAccordionBody>
-        </CAccordionItem>
-        <CAccordionItem itemKey={2}>
-          <CAccordionHeader>Accordion Item #2</CAccordionHeader>
-          <CAccordionBody>
-            <strong>This is the second item&#39;s accordion body.</strong> It is hidden by default,
-            until the collapse plugin adds the appropriate classes that we use to style each element.
-            These classes control the overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or overriding our default
-            variables. It&#39;s also worth noting that just about any HTML can go within the{' '}
-            <code>.accordion-body</code>, though the transition does limit overflow.
-          </CAccordionBody>
-        </CAccordionItem>
-        <CAccordionItem itemKey={3}>
-          <CAccordionHeader>Accordion Item #3</CAccordionHeader>
-          <CAccordionBody>
-            <strong>This is the second item&#39;s accordion body.</strong> It is hidden by default,
-            until the collapse plugin adds the appropriate classes that we use to style each element.
-            These classes control the overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or overriding our default
-            variables. It&#39;s also worth noting that just about any HTML can go within the{' '}
-            <code>.accordion-body</code>, though the transition does limit overflow.
-          </CAccordionBody>
-        </CAccordionItem>
-      </CAccordion>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount()}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <CForm onSubmit={formik.handleSubmit}>
+        <CCard>
+          <CCardHeader><h3>Create new Invoice</h3></CCardHeader>
+          <CCardBody>
+              <CRow>
+                <CCol sm={6} lg={6}>
+                  <CFormLabel htmlFor="clientName">Client Name</CFormLabel>
+                  <CFormInput 
+                    id="clientName"
+                    name="clientName"
+                    type="text"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.clientName}
+                    invalid={formik.touched.clientName && formik.errors.clientName ? true : false}
+                    required
+                  />
+                  {formik.touched.clientName && formik.errors.clientName ? (
+                    <CFormText as="span" id="exampleFormControlInputHelpInline" className='required-invalid'>
+                      {formik.errors.clientName}
+                    </CFormText>
+                  ) : null}
+                </CCol>
+                <CCol sm={6} lg={6}>
+                  <CDatePicker 
+                    id='date'
+                    name='date'
+                    date={formik.values.date}
+                    onDateChange={async (value) => {
+                      await formik.setFieldValue("date", value);
+                    }}
+                    label="Date" locale="en-US"
+                    invalid={formik.touched.date && formik.errors.date ? true : false}
+                    required />
+                  {formik.touched.date && formik.errors.date ? (
+                    <CFormText as="span" id="exampleFormControlInputHelpInline2" className='required-invalid'>
+                      {formik.errors.date}
+                    </CFormText>
+                  ) : null}
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol sm={6} lg={6}>
+                  <CFormLabel htmlFor="amount">Amount</CFormLabel>
+                  <CFormInput 
+                    id="amount"
+                    name="amount"
+                    type="number"
+                    value={formik.values.amount}
+                    onChange={formik.handleChange}
+                    invalid={formik.touched.amount && formik.errors.amount ? true : false}
+                    required
+                  />
+                  {formik.touched.amount && formik.errors.amount ? (
+                    <CFormText as="span" id="exampleFormControlInputHelpInline" className='required-invalid'>
+                      {formik.errors.amount}
+                    </CFormText>
+                  ) : null}
+                </CCol>
+                <CCol sm={6} lg={6}>
+                  <CFormLabel htmlFor="status">Status</CFormLabel>
+                  <CFormSelect
+                    id="status"
+                    name="status"
+                    onChange={formik.handleChange}
+                    value={formik.values.status}
+                    aria-label="Default select example"
+                    invalid={formik.touched.status && formik.errors.status ? true : false}
+                    required
+                    options={[
+                      { label: 'Select option', value: '' },
+                      { label: 'Paid', value: '1' },
+                      { label: 'Unpaid', value: '2' }
+                    ]}
+                  />
+                  {formik.touched.status && formik.errors.status ? (
+                    <CFormText as="span" id="exampleFormControlInputHelpInline3" className='required-invalid'>
+                      {formik.errors.status}
+                    </CFormText>
+                  ) : null}
+                </CCol>
+              </CRow>
+          </CCardBody>
+          <CCardFooter className="text-body-secondary text-end">
+            <CButton type="submit" color="primary" className="margin-right">Save</CButton>
+            <CButton color="secondary" type="button" onClick={async () => {
+              await clearInvoice();
+              await formik.resetForm(invoice);
+              await formik.submitForm();
+            }}>Clear</CButton>
+          </CCardFooter>
+        </CCard>
+      </CForm>
+      <div>{ JSON.stringify(invoice, null, 2) }</div>
     </>
   )
 }
