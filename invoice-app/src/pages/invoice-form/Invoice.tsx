@@ -1,4 +1,4 @@
-import './App.css'
+import './Invoice.css'
 import { create } from 'zustand'
 import { 
   CRow,
@@ -15,26 +15,27 @@ import {
   CCardBody,
   CCardFooter
 } from '@coreui/react-pro';
- import { useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { useEffect } from 'react';
- import * as Yup from 'yup';
-import type { FormStore } from './core/types/form-store';
-import type { Invoice } from './core/types/Invoice';
+import * as Yup from 'yup';
+import type { FormStoreType } from '../../core/types/form-store';
+import type { InvoiceType } from '../../core/types/Invoice';
 
-const useInvoiceForm = create<FormStore>((set) => ({
+
+const useInvoiceForm = create<FormStoreType>((set) => ({
   invoice: {
     clientName: '',
     date: undefined,
     status: '',
     amount: 0,
-  } as Invoice,
-  setInvoice: (data : Invoice) => set({ invoice: data }),
+  } as InvoiceType,
+  setInvoice: (data : InvoiceType) => set({ invoice: data }),
   clearInvoice: () => set({ invoice: {
     clientName: '',
     date: undefined,
     status: '',
     amount: 0,
-  } as Invoice }),
+  } as InvoiceType }),
 }));
 
 const validationSchema = Yup.object({
@@ -51,7 +52,7 @@ const validationSchema = Yup.object({
     .min(1, 'Number cannot be negative or zero'),
 });
 
-function App() {
+function Invoice() {
 
   const { invoice, setInvoice, clearInvoice } = useInvoiceForm();
 
@@ -167,4 +168,4 @@ function App() {
   )
 }
 
-export default App
+export default Invoice
