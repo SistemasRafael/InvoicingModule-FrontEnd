@@ -1,6 +1,6 @@
-import type { InvoiceType } from "./Invoice";
+import type { InvoiceType } from "./Invoice-type";
 
-export type FormStoreType = {
+export type InvoiceFormType = {
   invoice: InvoiceType,
   setInvoice: (data : any) => void,
   clearInvoice: () => void,

@@ -1,35 +1,40 @@
-import { useState } from 'react';
 import './Invoice-Grid.css';
 import { AgGridReact } from 'ag-grid-react';
 import { AllCommunityModule, ModuleRegistry, type ColDef } from 'ag-grid-community'; 
+import type { InvoiceType } from '../../core/types/Invoice-type';
+import { invoiceFakeData, invoiceGridColsNames } from '../../core/fake-data/invoice-fake-data';
+import { create } from 'zustand';
+import type { InvoiceGridRowsType } from '../../core/types/invoice-grid-rows-type';
+import type { InvoiceGridColsType } from '../../core/types/invoice-grid-cols-type';
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-interface IRow {
-  make: string;
-  model: string;
-  price: number;
-  electric: boolean;
-}
-
 function InvoiceGrid() {
-  const [rowData, setRowData] = useState<IRow[]>([
-    { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-  ]);
 
-  const [colDefs, setColDefs] = useState<ColDef<IRow>[]>([
-    { field: "make" },
-    { field: "model" },
-    { field: "price" },
-    { field: "electric" },
-  ]);
+  const useInvoiceGridRows = create<InvoiceGridRowsType>((set) => ({
+    invoiceGridRows: invoiceFakeData,
+    setInvoiceGridRows: (data : InvoiceType[]) => set({ invoiceGridRows: data }),
+    clearInvoiceGridRows: () => set({ invoiceGridRows: [] }),
+  }));
 
+  const useInvoiceGridCols = create<InvoiceGridColsType>((set) => ({
+    invoiceGridCols: invoiceGridColsNames,
+    setInvoiceGridCols: (data : ColDef<InvoiceType>[]) => set({ invoiceGridCols: data }),
+    clearInvoiceGridCols: () => set({ invoiceGridCols: [] }),
+  }));
+  
+  const { invoiceGridRows } = useInvoiceGridRows();
+  const {invoiceGridCols} = useInvoiceGridCols();
+  
   return (
-    <div style={{ width: "100%", height: "500px" }}>
-      <AgGridReact rowData={rowData} columnDefs={colDefs} />
+    <div style={{ width: "100%", height: "300px" }}>
+      <AgGridReact 
+      rowData={invoiceGridRows}
+      columnDefs={invoiceGridCols}
+      pagination={true}
+      paginationPageSizeSelector={[20, 30, 50]}
+      paginationPageSize={20}/>
     </div>
   )
 }

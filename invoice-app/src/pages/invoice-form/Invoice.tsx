@@ -18,19 +18,20 @@ import {
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import * as Yup from 'yup';
-import type { FormStoreType } from '../../core/types/form-store';
-import type { InvoiceType } from '../../core/types/Invoice';
+import type { InvoiceFormType } from '../../core/types/invoice-form-type';
+import type { InvoiceType } from '../../core/types/Invoice-type';
 
 const initialInvoice : InvoiceType = {
   clientName: '',
   date: null,
   status: '',
   amount: 0,
+  invoiceNumber: ''
 };
 
 function Invoice() {
 
-  const useInvoiceForm = create<FormStoreType>((set) => ({
+  const useInvoiceForm = create<InvoiceFormType>((set) => ({
     invoice: initialInvoice,
     setInvoice: (data : InvoiceType) => set({ invoice: data }),
     clearInvoice: () => set({ invoice: initialInvoice }),
@@ -155,7 +156,7 @@ function Invoice() {
               </CRow>
           </CCardBody>
           <CCardFooter className="text-body-secondary text-end">
-            <CButton type="submit" color="primary" className="margin-right">Save</CButton>
+            <CButton type="submit" color="primary" className="margin-right" disabled={!formik.isValid}>Save</CButton>
             <CButton color="secondary" type="button" disabled={!formik.dirty} 
             onClick={async ()=> {
               await clearInvoice();
