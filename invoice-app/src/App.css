@@ -2,6 +2,10 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
+  width: 100%;
+}
+
+.text-align-center{
   text-align: center;
 }
 
@@ -33,10 +37,31 @@
   }
 }
 
-.card {
-  padding: 2em;
+.margin-right{
+  margin-right: 10px;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+.react-datepicker__input-container input {
+  border: 2px solid #007bff;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.react-datepicker__header {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.react-datepicker__day--selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.required-invalid{
+  color: red;
 }
