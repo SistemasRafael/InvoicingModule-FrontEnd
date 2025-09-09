@@ -21,52 +21,53 @@ import * as Yup from 'yup';
 import type { FormStoreType } from '../../core/types/form-store';
 import type { InvoiceType } from '../../core/types/Invoice';
 
-
-const useInvoiceForm = create<FormStoreType>((set) => ({
-  invoice: {
-    clientName: '',
-    date: undefined,
-    status: '',
-    amount: 0,
-  } as InvoiceType,
-  setInvoice: (data : InvoiceType) => set({ invoice: data }),
-  clearInvoice: () => set({ invoice: {
-    clientName: '',
-    date: undefined,
-    status: '',
-    amount: 0,
-  } as InvoiceType }),
-}));
-
-const validationSchema = Yup.object({
-  clientName: Yup.string()
-    .max(45, 'Must be 45 characters or less')
-    .required('This field is required!'),
-  date: Yup.date()
-    .nonNullable()
-    .required('This field is required!'),
-  status: Yup.string()
-    .required('This field is required!'),
-  amount: Yup.number()
-    .required('This field is required!')
-    .min(1, 'Number cannot be negative or zero'),
-});
+const initialInvoice : InvoiceType = {
+  clientName: '',
+  date: null,
+  status: '',
+  amount: 0,
+};
 
 function Invoice() {
+
+  const useInvoiceForm = create<FormStoreType>((set) => ({
+    invoice: initialInvoice,
+    setInvoice: (data : InvoiceType) => set({ invoice: data }),
+    clearInvoice: () => set({ invoice: initialInvoice }),
+  }));
 
   const { invoice, setInvoice, clearInvoice } = useInvoiceForm();
 
   const formik = useFormik({
     initialValues : invoice,
-    validationSchema: validationSchema,
+    validationSchema: Yup.object({
+      clientName: Yup.string()
+        .max(45, 'Must be 45 characters or less')
+        .required('This field is required!'),
+      date: Yup.date()
+        .nonNullable()
+        .required('This field is required!'),
+      status: Yup.string()
+        .required('This field is required!'),
+      amount: Yup.number()
+        .required('This field is required!')
+        .min(1, 'Number cannot be negative or zero'),
+    }),
     onSubmit: async values => {
       await setInvoice(values);
+      await resetInvoiceForm();
     },
   });
 
   useEffect(() => {
     formik.submitForm();
   }, []);
+
+  const resetInvoiceForm = async () => {
+    (document.getElementById('date') as HTMLInputElement).value = "";
+    await formik.resetForm(invoice);
+    await formik.submitForm();
+  };
 
   return (
     <>
@@ -97,7 +98,7 @@ function Invoice() {
                   <CDatePicker 
                     id='date'
                     name='date'
-                    date={formik.values.date}
+                    date={invoice.date}
                     onDateChange={async (value) => {
                       await formik.setFieldValue("date", value);
                     }}
@@ -155,10 +156,10 @@ function Invoice() {
           </CCardBody>
           <CCardFooter className="text-body-secondary text-end">
             <CButton type="submit" color="primary" className="margin-right">Save</CButton>
-            <CButton color="secondary" type="button" onClick={async () => {
+            <CButton color="secondary" type="button" disabled={!formik.dirty} 
+            onClick={async ()=> {
               await clearInvoice();
-              await formik.resetForm(invoice);
-              await formik.submitForm();
+              await resetInvoiceForm();
             }}>Clear</CButton>
           </CCardFooter>
         </CCard>

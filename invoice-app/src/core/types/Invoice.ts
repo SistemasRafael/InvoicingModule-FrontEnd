@@ -1,6 +1,6 @@
 export type InvoiceType = {
     clientName: string,
-    date: Date | undefined,
+    date: Date | null,
     status: string,
     amount: number,
   }
