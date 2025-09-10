@@ -29,13 +29,13 @@ const initialInvoice : InvoiceType = {
   invoiceNumber: ''
 };
 
-function Invoice() {
+const useInvoiceForm = create<InvoiceFormType>((set) => ({
+  invoice: initialInvoice,
+  setInvoice: (data : InvoiceType) => set({ invoice: data }),
+  clearInvoice: () => set({ invoice: initialInvoice }),
+}));
 
-  const useInvoiceForm = create<InvoiceFormType>((set) => ({
-    invoice: initialInvoice,
-    setInvoice: (data : InvoiceType) => set({ invoice: data }),
-    clearInvoice: () => set({ invoice: initialInvoice }),
-  }));
+function Invoice() {
 
   const { invoice, setInvoice, clearInvoice } = useInvoiceForm();
 

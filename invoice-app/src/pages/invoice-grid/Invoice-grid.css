@@ -1,0 +1,9 @@
+.Drag-And-Drop{
+    border-style: dashed;
+    padding: 20px;
+    text-align: center;
+}
+
+.ag-over-21-row {
+    background-color:rgb(227 247 139);
+}
