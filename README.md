@@ -9,7 +9,7 @@ To see Story book run:<br>
 
 Pages:<br>
 Invoice Module<br>
-http://localhost:<port>/<br>
+http://localhost:{port}/<br>
 
 Invoice Grid:<br>
 http://localhost:<port>/Invoicegrid
