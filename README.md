@@ -1,4 +1,4 @@
-# Invoicing Module
+# Invoice Module
 
 To run the project you need to follows these little steps:<br>
 1.- npm install<br>
