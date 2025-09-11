@@ -12,5 +12,5 @@ Invoice Module<br>
 http://localhost:{port}/<br>
 
 Invoice Grid:<br>
-http://localhost:<port>/Invoicegrid
+http://localhost:{port}/Invoicegrid
 
