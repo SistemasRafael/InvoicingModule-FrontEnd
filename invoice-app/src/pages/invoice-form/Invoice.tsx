@@ -1,5 +1,4 @@
 import './Invoice.css'
-import { create } from 'zustand'
 import { 
   CRow,
   CCol,
@@ -18,22 +17,7 @@ import {
 import { useFormik } from 'formik';
 import { useEffect } from 'react';
 import * as Yup from 'yup';
-import type { InvoiceFormType } from '../../core/types/invoice-form-type';
-import type { InvoiceType } from '../../core/types/Invoice-type';
-
-const initialInvoice : InvoiceType = {
-  clientName: '',
-  date: null,
-  status: '',
-  amount: 0,
-  invoiceNumber: ''
-};
-
-const useInvoiceForm = create<InvoiceFormType>((set) => ({
-  invoice: initialInvoice,
-  setInvoice: (data : InvoiceType) => set({ invoice: data }),
-  clearInvoice: () => set({ invoice: initialInvoice }),
-}));
+import { useInvoiceForm } from '../../zustand-statements/use-invoice-form';
 
 function Invoice() {
 
@@ -74,7 +58,7 @@ function Invoice() {
     <>
       <CForm onSubmit={formik.handleSubmit}>
         <CCard>
-          <CCardHeader><h3>Create new Invoice</h3></CCardHeader>
+          <CCardHeader><h3 className="text-3xl font-bold">Create new Invoice</h3></CCardHeader>
           <CCardBody>
               <CRow>
                 <CCol sm={6} lg={6}>

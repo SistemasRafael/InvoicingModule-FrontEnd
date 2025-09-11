@@ -1,5 +1,5 @@
 import type { ColDef, IDateFilterParams } from "ag-grid-community";
-import type { InvoiceType } from "../types/Invoice-type";
+import type { InvoiceType } from "../../types/Invoice-type";
 
 const randomDate = (start : Date, end : Date) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))

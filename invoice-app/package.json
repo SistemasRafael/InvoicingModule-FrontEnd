@@ -12,6 +12,7 @@
   "dependencies": {
     "@coreui/coreui-pro": "^5.19.0",
     "@coreui/react-pro": "^5.21.0",
+    "@tailwindcss/vite": "^4.1.13",
     "ag-grid-react": "^34.1.2",
     "formik": "^2.4.6",
     "primereact": "^10.9.7",
@@ -20,6 +21,7 @@
     "react-dom": "^19.1.1",
     "react-dropzone": "^14.3.8",
     "react-router-dom": "^7.8.2",
+    "tailwindcss": "^4.1.13",
     "yup": "^1.7.0",
     "zustand": "^5.0.8"
   },
