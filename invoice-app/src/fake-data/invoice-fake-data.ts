@@ -1,5 +1,5 @@
 import type { ColDef, IDateFilterParams } from "ag-grid-community";
-import type { InvoiceType } from "../../types/Invoice-type";
+import type { InvoiceType } from "../types/Invoice-type";
 
 const randomDate = (start : Date, end : Date) => {
   const date = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
@@ -50,7 +50,7 @@ export const invoiceGridColsNames : ColDef<InvoiceType>[] = [
   { field: "date", filter: "agDateColumnFilter", filterParams: filterParams },
   { field: "status", filter: "agTextColumnFilter" },
   { field: "amount" },
-]
+];
 
 export const invoiceFakeData : InvoiceType[] = [
     { invoiceNumber: "0001", clientName: "Tesla", date: randomDate(new Date(2012, 0, 1), new Date()), status: "Paid", amount: 1 },
