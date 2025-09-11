@@ -15,5 +15,11 @@ Invoice Grid:<br>
 http://localhost:{port}/Invoicegrid<br>
 
 StoryBook:<br>
-http://localhost:{port}/?path=/story/components-drag-drop--drag-and-drop
+http://localhost:{port}/?path=/story/components-drag-drop--drag-and-drop<br>
+
+To test DragAndDrop there are three csv files in the repository that you can use.<br>
+1.-InvoiceCSVTestDateWrong<br>
+2.-InvoiceCSVTest<br>
+3.-InvoiceCSVTestRequiredField<br>
+
 
