@@ -1,0 +1,7 @@
+"invoiceNumber","clientName","date","status","amount"
+"0001","Rafael","02/10/2021","Paid","12"
+"","Milagros","09/12/2022","","32"
+"0003","","90/90/2020","Paid","43"
+"0004","Daniel","01/09/2019","Paid","54"
+"0005","Lia","09/07/2020","UnPaid","65"
+"0006","Carlitos","09/12/2002","UnPaid","76"
