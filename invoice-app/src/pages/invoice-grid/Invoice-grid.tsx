@@ -1,4 +1,4 @@
-import './Invoice-Grid.css';
+import './Invoice-grid.css';
 import { AgGridReact } from 'ag-grid-react';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 import type { InvoiceType } from '../../types/Invoice-type';
